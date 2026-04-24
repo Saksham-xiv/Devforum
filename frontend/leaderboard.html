@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard - DevForum AI</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="login-container">
+    <div class="login-card">
+        <h2>🏆 Leaderboard</h2>
+        <p class="login-subtitle">Top contributors this month</p>
+
+        <div id="leaderboardContainer">
+            <!-- Leaderboard will be loaded here -->
+        </div>
+
+        <button onclick="window.location.href='dashboard.html'">Back to Dashboard</button>
+    </div>
+</div>
+
+<script>
+    // Load leaderboard data
+    async function loadLeaderboardPage() {
+        const response = await fetch('http://127.0.0.1:5000/api/profile/leaderboard');
+        const data = await response.json();
+
+        const container = document.getElementById('leaderboardContainer');
+        container.innerHTML = '';
+
+        const medals = ['🥇', '🥈', '🥉'];
+
+        data.forEach((user, index) => {
+            const medal = medals[index] || `#${index + 1}`;
+            const rankClass = `rank-${index + 1}`;
+
+            container.innerHTML += `
+                <div class="leaderboard-item ${rankClass}" style="margin: 10px 0; padding: 15px; border-radius: 12px; background: rgba(255,255,255,0.9);">
+                    <span style="font-weight: bold; font-size: 16px;">
+                        ${medal} ${user.username}
+                    </span>
+                    <span style="color: #667eea; font-weight: bold; font-size: 18px;">
+                        ${user.reputation} pts
+                    </span>
+                </div>
+            `;
+        });
+    }
+
+    loadLeaderboardPage();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevForum Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app-shell">
+    <button class="mobile-menu-toggle" onclick="toggleSidebar()" aria-label="Open navigation">☰</button>
+
+    <aside class="sidebar" id="sidebar">
+        <button class="sidebar-collapse-btn" id="sidebarCollapseBtn" onclick="toggleSidebarCollapse()" aria-label="Collapse navigation">
+            <span id="sidebarCollapseIcon">◀</span>
+        </button>
+
+        <div class="brand-block">
+            <p class="eyebrow">Community workspace</p>
+            <h2 class="logo">DevForum</h2>
+            <p class="brand-copy">Reddit-style discussion, StackOverflow-style help, HackerRank-style practice, and Discord-style communities in one developer hub.</p>
+        </div>
+
+        <nav class="nav-stack">
+            <button class="nav-btn" data-section="feed" onclick="showFeed()">Feed</button>
+            <button class="nav-btn" data-section="trending" onclick="showTrending()">Trending</button>
+            <button class="nav-btn" data-section="problem-sets" onclick="showProblemSets()">Problem Sets</button>
+            <button class="nav-btn" data-section="communities" onclick="showCommunities()">Communities</button>
+            <button class="nav-btn" data-section="profile" onclick="showProfile()">Profile</button>
+        </nav>
+
+        <button class="sidebar-scroll-btn" type="button" onclick="scrollSidebarToBottom()" aria-label="Scroll down to logout">
+            <span class="sidebar-scroll-btn__icon">v</span>
+            <span class="sidebar-scroll-btn__label">Jump to Logout</span>
+        </button>
+
+        <div class="sidebar-footer">
+            <div class="sidebar-note">
+                <span class="sidebar-note-label">Goal</span>
+                <p>Create a platform where developers learn, solve problems, discuss ideas, and grow together.</p>
+            </div>
+            <div class="sidebar-note">
+                <span class="sidebar-note-label">Theme</span>
+                <p>Light, dark, and high-contrast views stay in sync across the dashboard.</p>
+            </div>
+            <button class="nav-btn nav-btn-secondary" onclick="logout()">Logout</button>
+        </div>
+    </aside>
+
+    <main class="main" id="mainContent">
+        <div class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle color theme">
+            <div class="toggle-icon">☀️</div>
+        </div>
+
+        <section class="top-strip">
+            <div class="top-strip-copy">
+                <p class="eyebrow">Core vision</p>
+                <h2>One workspace for learning, solving, discussing, and leveling up.</h2>
+            </div>
+            <div class="notification-preview-panel">
+                <div class="notification-preview-header">
+                    <div>
+                        <p class="eyebrow">Notifications</p>
+                        <h3>Latest updates</h3>
+                    </div>
+                    <a class="ghost-link" href="notifications.html">View all</a>
+                </div>
+                <div id="notificationCenter" class="notification-center"></div>
+            </div>
+        </section>
+
+        <section id="feedContent" class="page-section">
+            <div class="page-hero">
+                <div>
+                    <p class="eyebrow">Daily workspace</p>
+                    <h1>Developer Feed</h1>
+                    <p class="subtitle">Scan discussions, open a thread, and publish questions without losing context.</p>
+                </div>
+                <div class="hero-stats">
+                    <div class="mini-stat">
+                        <span class="mini-stat-label">Mode</span>
+                        <strong>Discussion</strong>
+                    </div>
+                    <div class="mini-stat">
+                        <span class="mini-stat-label">Focus</span>
+                        <strong>Recent posts</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div id="postDetailsSection" class="card detail-card" style="display: none;">
+                <button class="back-btn" onclick="backToPostsList()">Back to Posts</button>
+                <div id="postDetails"></div>
+            </div>
+
+            <div id="postsListSection" class="feed-grid">
+                <div class="card search-card">
+                    <div class="card-heading">
+                        <div>
+                            <p class="eyebrow">Find something fast</p>
+                            <h3>Search Posts</h3>
+                        </div>
+                    </div>
+                    <input type="text" id="searchInput" placeholder="Search by title, content, or author" onkeyup="searchPosts()">
+                </div>
+
+                <div class="card composer-card">
+                    <div class="card-heading">
+                        <div>
+                            <p class="eyebrow">Start a thread</p>
+                            <h3>Create Post</h3>
+                        </div>
+                    </div>
+                    <select id="postCommunity">
+                        <option value="">Post to main feed</option>
+                    </select>
+                    <input type="text" id="postTitle" placeholder="What are you building or debugging?">
+                    <textarea id="postContent" placeholder="Share the problem, code context, and what you've already tried." rows="5"></textarea>
+                    <button onclick="createPost()">Publish Post</button>
+                </div>
+
+                <div class="card posts-card">
+                    <div class="card-heading">
+                        <div>
+                            <p class="eyebrow">Live activity</p>
+                            <h3>All Posts</h3>
+                        </div>
+                    </div>
+                    <div id="posts" class="posts-stack"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="trendingContent" class="page-section" style="display: none;">
+            <div class="page-hero">
+                <div>
+                    <p class="eyebrow">Momentum board</p>
+                    <h1>Trending</h1>
+                    <p class="subtitle">Spot the most active threads and the contributors collecting the most trust.</p>
+                </div>
+                <div class="hero-stats">
+                    <div class="mini-stat">
+                        <span class="mini-stat-label">Signals</span>
+                        <strong>Votes + freshness</strong>
+                    </div>
+                    <div class="mini-stat">
+                        <span class="mini-stat-label">Community</span>
+                        <strong>Top builders</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="trending-layout">
+                <div class="card leaderboard-card">
+                    <div class="card-heading">
+                        <div>
+                            <p class="eyebrow">Top contributors</p>
+                            <h3>Leaderboard</h3>
+                        </div>
+                    </div>
+                    <div id="leaderboard" class="leaderboard-list"></div>
+                </div>
+
+                <div class="card trending-card">
+                    <div class="card-heading">
+                        <div>
+                            <p class="eyebrow">Rising discussions</p>
+                            <h3>Trending Posts</h3>
+                        </div>
+                    </div>
+                    <div id="trending" class="trending-list"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="problemSetsContent" class="page-section" style="display: none;">
+            <div class="page-hero">
+                <div>
+                    <p class="eyebrow">Challenge arena</p>
+                    <h1>Problem Sets</h1>
+                    <p class="subtitle">Practice structured coding problems, track progress, and solve together with discussions, hints, and chat.</p>
+                </div>
+                <div class="hero-stats">
+                    <div class="mini-stat">
+                        <span class="mini-stat-label">Formats</span>
+                        <strong>I/O + samples</strong>
+                    </div>
+                    <div class="mini-stat">
+                        <span class="mini-stat-label">Results</span>
+                        <strong>Passed / Failed</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-layout">
+                <div class="card problem-browser-card">
+                    <div class="card-heading">
+                        <div>
+                            <p class="eyebrow">Challenge list</p>
+                            <h3>Available Problems</h3>
+                        </div>
+                        <div id="problemProgressSummary" class="inline-summary"></div>
+                    </div>
+                    <div id="problemSetList" class="problem-list"></div>
+                </div>
+
+                <div class="problem-detail-column">
+                    <div class="card">
+                        <div class="card-heading">
+                            <div>
+                                <p class="eyebrow">Selected challenge</p>
+                                <h3>Problem Details</h3>
+                            </div>
+                        </div>
+                        <div id="problemSetDetails" class="problem-details"></div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-heading">
+                            <div>
+                                <p class="eyebrow">Solved archive</p>
+                                <h3>Your Progress</h3>
+                            </div>
+                        </div>
+                        <div id="solvedProblemsList" class="solved-list"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="communitiesContent" class="page-section" style="display: none;">
+            <div class="page-hero">
+                <div>
+                    <p class="eyebrow">Community hub</p>
+                    <h1>Communities</h1>
+                    <p class="subtitle">Create topic-based spaces, join conversations, and keep a personalized feed from the groups you care about.</p>
+                </div>
+                <div class="hero-stats">
+                    <div class="mini-stat">
+                        <span class="mini-stat-label">Style</span>
+                        <strong>Forum + chat</strong>
+                    </div>
+                    <div class="mini-stat">
+                        <span class="mini-stat-label">Feed</span>
+                        <strong>Joined communities</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="community-layout">
+                <div class="card">
+                    <div class="card-heading">
+                        <div>
+                            <p class="eyebrow">Start a space</p>
+                            <h3>Create Community</h3>
+                        </div>
+                    </div>
+                    <input type="text" id="communityName" placeholder="Community name">
+                    <input type="text" id="communityTopic" placeholder="Topic, e.g. AI, DSA, Web Dev">
+                    <textarea id="communityDescription" placeholder="Describe what builders will discuss here." rows="4"></textarea>
+                    <button onclick="createCommunity()">Create Community</button>
+                </div>
+
+                <div class="card">
+                    <div class="card-heading">
+                        <div>
+                            <p class="eyebrow">Joined spaces</p>
+                            <h3>Your Community Feed</h3>
+                        </div>
+                    </div>
+                    <div id="joinedCommunitiesFeed" class="community-feed"></div>
+                </div>
+
+                <div class="card community-catalog-card">
+                    <div class="card-heading">
+                        <div>
+                            <p class="eyebrow">Browse</p>
+                            <h3>Community Catalog</h3>
+                        </div>
+                    </div>
+                    <div id="communityList" class="community-list"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="profileSection" class="page-section profile-host" style="display: none;"></section>
+    </main>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

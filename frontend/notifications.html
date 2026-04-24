@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevForum Notifications</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle color theme">
+    <div class="toggle-icon">Light</div>
+</div>
+
+<main class="history-page">
+    <section class="page-hero">
+        <div>
+            <p class="eyebrow">Activity timeline</p>
+            <h1>Notification History</h1>
+            <p class="subtitle">See every reply, problem update, and community event in one place.</p>
+        </div>
+        <a class="ghost-link" href="dashboard.html">Back to dashboard</a>
+    </section>
+
+    <section class="card notification-history-card">
+        <div class="card-heading">
+            <div>
+                <p class="eyebrow">Full feed</p>
+                <h3>All notifications</h3>
+            </div>
+        </div>
+        <div id="notificationHistoryList" class="notification-history-list"></div>
+    </section>
+</main>
+
+<script src="js/app.js"></script>
+</body>
+</html>
