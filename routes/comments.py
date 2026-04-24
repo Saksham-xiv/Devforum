@@ -73,7 +73,7 @@ def get_comments(post_id):
         JOIN users ON comments.user_id = users.id
         LEFT JOIN votes ON comments.id = votes.comment_id
         WHERE comments.post_id = %s
-        GROUP BY comments.id
+        GROUP BY comments.id, users.username
         ORDER BY comments.is_accepted DESC, comments.created_at DESC
     """, (post_id,))
 
